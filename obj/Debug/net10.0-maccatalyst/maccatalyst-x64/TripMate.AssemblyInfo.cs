@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TripMate")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+18a87d9c6a274ca260bf0b029b09b2efe2762682")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+8df5e9b9561e403bdcde812cc71e7f99ce41d32e")]
 [assembly: System.Reflection.AssemblyProductAttribute("TripMate")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TripMate")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
