@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TripMate.ViewModels"
+             x:Class="TripMate.Views.TripDetailPage"
+             x:DataType="vm:TripDetailViewModel"
+             Title="{Binding TripName}">
+
+    <RefreshView IsRefreshing="{Binding IsBusy}" Command="{Binding RefreshCommand}">
+        <ScrollView>
+            <VerticalStackLayout Padding="16" Spacing="16">
+                <Label Text="{Binding StatusMessage}" IsVisible="{Binding HasError}"
+                       TextColor="Red" HorizontalOptions="Center" />
+
+                <!-- Trip info -->
+                <Border Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="{Binding Destination}" FontSize="16" Opacity="0.9" />
+                        <Label Text="{Binding DateRange}" FontSize="14" Opacity="0.7" />
+                        <Label Text="{Binding Status}" TextColor="{StaticResource Primary}" FontSize="14" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Dashboard summary -->
+                <Label Text="Summary" FontSize="18" FontAttributes="Bold" Margin="16,8,0,0" />
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                        <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                            <Label Text="Total Cost" FontSize="12" Opacity="0.7" />
+                            <Label FontSize="20" FontAttributes="Bold">
+                                <Label.Text>
+                                    <Binding Path="TotalTripCost" StringFormat="₹{0:N2}" />
+                                </Label.Text>
+                            </Label>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+                        <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                            <Label Text="You Paid" FontSize="12" Opacity="0.7" />
+                            <Label FontSize="20" FontAttributes="Bold">
+                                <Label.Text>
+                                    <Binding Path="YourTotalPaid" StringFormat="₹{0:N2}" />
+                                </Label.Text>
+                            </Label>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+                <Border Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label Text="Your Balance" FontSize="12" Opacity="0.7" />
+                        <Label FontSize="22" FontAttributes="Bold"
+                               TextColor="{StaticResource Primary}">
+                            <Label.Text>
+                                <Binding Path="YourBalance" StringFormat="₹{0:N2}" />
+                            </Label.Text>
+                        </Label>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Settlements preview -->
+                <Border Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Settlements" FontAttributes="Bold" />
+                        <Label Text="{Binding SettlementSummary}" LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+                    <Button Grid.Column="0" Text="Add Expense" Command="{Binding AddExpenseCommand}" />
+                    <Button Grid.Column="1" Text="View Expenses" Command="{Binding ViewExpensesCommand}" />
+                </Grid>
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Button Grid.Column="0" Text="Settlements" Command="{Binding ViewSettlementsCommand}"
+                            BackgroundColor="Transparent" TextColor="{StaticResource Primary}" />
+                    <Button Grid.Column="1" Text="Members" Command="{Binding ManageMembersCommand}"
+                            BackgroundColor="Transparent" TextColor="{StaticResource Primary}" />
+                </Grid>
+                <Button Text="Edit Trip" Command="{Binding EditTripCommand}"
+                        BackgroundColor="Transparent" TextColor="{StaticResource Gray500}" />
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                                  HorizontalOptions="Center" Margin="0,20" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

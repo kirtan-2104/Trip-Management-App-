@@ -1,0 +1,937 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TripMate</name>
+    </assembly>
+    <members>
+        <member name="T:TripMate.Data.AppDbContext">
+            <summary>
+            Entity Framework Core database context for TripMate.
+            Uses SQLite for local storage.
+            </summary>
+        </member>
+        <member name="T:TripMate.Data.DataSeeder">
+            <summary>
+            Seeds the database with sample data for development and demo.
+            </summary>
+        </member>
+        <member name="T:TripMate.Data.ExpenseRepository">
+            <summary>
+            Repository implementation for Expense entity.
+            </summary>
+        </member>
+        <member name="T:TripMate.Data.IExpenseRepository">
+            <summary>
+            Repository interface for Expense entity operations.
+            </summary>
+        </member>
+        <member name="T:TripMate.Data.ITripRepository">
+            <summary>
+            Repository interface for Trip entity operations.
+            </summary>
+        </member>
+        <member name="T:TripMate.Data.IUserRepository">
+            <summary>
+            Repository interface for User entity operations.
+            </summary>
+        </member>
+        <member name="T:TripMate.Data.TripRepository">
+            <summary>
+            Repository implementation for Trip entity.
+            </summary>
+        </member>
+        <member name="T:TripMate.Data.UserRepository">
+            <summary>
+            Repository implementation for User entity.
+            </summary>
+        </member>
+        <member name="T:TripMate.Helpers.PasswordHelper">
+            <summary>
+            Helper for secure password hashing and verification.
+            Uses SHA256 for local storage (production apps should use bcrypt or Argon2).
+            </summary>
+        </member>
+        <member name="T:TripMate.Helpers.ServiceHelper">
+            <summary>
+            Service locator for resolving dependencies when constructor injection is not available (e.g. Shell DataTemplate).
+            </summary>
+        </member>
+        <member name="T:TripMate.Helpers.StringNotEmptyConverter">
+            <summary>
+            Converts non-empty string to true, empty to false.
+            </summary>
+        </member>
+        <member name="T:TripMate.Models.Expense">
+            <summary>
+            Represents an expense within a trip.
+            </summary>
+        </member>
+        <member name="T:TripMate.Models.ExpenseSplitType">
+            <summary>
+            How an expense is split among members.
+            </summary>
+        </member>
+        <member name="T:TripMate.Models.ExpenseSplit">
+            <summary>
+            Represents a single person's share of an expense.
+            Used for both equal and custom splits.
+            </summary>
+        </member>
+        <member name="T:TripMate.Models.Trip">
+            <summary>
+            Represents a group trip with members and expenses.
+            </summary>
+        </member>
+        <member name="T:TripMate.Models.TripStatus">
+            <summary>
+            Trip status enumeration.
+            </summary>
+        </member>
+        <member name="T:TripMate.Models.TripMember">
+            <summary>
+            Junction table linking users to trips (many-to-many).
+            </summary>
+        </member>
+        <member name="T:TripMate.Models.User">
+            <summary>
+            Represents a user in the TripMate application.
+            Stored locally for authentication and trip membership.
+            </summary>
+        </member>
+        <member name="T:TripMate.Services.AuthService">
+            <summary>
+            Authentication service implementation.
+            </summary>
+        </member>
+        <member name="T:TripMate.Services.DashboardService">
+            <summary>
+            Dashboard service implementation.
+            </summary>
+        </member>
+        <member name="T:TripMate.Services.ExpenseCalculationService">
+            <summary>
+            Expense calculation service implementation.
+            Handles equal and custom split calculations.
+            </summary>
+        </member>
+        <member name="T:TripMate.Services.ExpenseService">
+            <summary>
+            Expense service implementation.
+            </summary>
+        </member>
+        <member name="T:TripMate.Services.IAuthService">
+            <summary>
+            Authentication service for local user management.
+            </summary>
+        </member>
+        <member name="T:TripMate.Services.DashboardSummary">
+            <summary>
+            Dashboard summary data for a trip.
+            </summary>
+        </member>
+        <member name="M:TripMate.Services.DashboardSummary.#ctor(System.Decimal,System.Decimal,System.Decimal,System.Int32)">
+            <summary>
+            Dashboard summary data for a trip.
+            </summary>
+        </member>
+        <member name="T:TripMate.Services.IDashboardService">
+            <summary>
+            Service for dashboard and report aggregation.
+            </summary>
+        </member>
+        <member name="T:TripMate.Services.IExpenseCalculationService">
+            <summary>
+            Service for calculating expense splits and per-person amounts.
+            </summary>
+        </member>
+        <member name="T:TripMate.Services.IExpenseService">
+            <summary>
+            Expense management service.
+            </summary>
+        </member>
+        <member name="T:TripMate.Services.SettlementItem">
+            <summary>
+            Represents a settlement instruction: who pays whom how much.
+            </summary>
+        </member>
+        <member name="M:TripMate.Services.SettlementItem.#ctor(System.String,System.String,System.Decimal)">
+            <summary>
+            Represents a settlement instruction: who pays whom how much.
+            </summary>
+        </member>
+        <member name="T:TripMate.Services.ISettlementService">
+            <summary>
+            Service for computing simplified settlements (who owes whom).
+            </summary>
+        </member>
+        <member name="T:TripMate.Services.ITripService">
+            <summary>
+            Trip management service.
+            </summary>
+        </member>
+        <member name="T:TripMate.Services.SettlementService">
+            <summary>
+            Settlement calculation using simplified debt resolution algorithm.
+            Computes minimal transactions to settle all balances.
+            </summary>
+        </member>
+        <member name="T:TripMate.Services.TripService">
+            <summary>
+            Trip service implementation.
+            </summary>
+        </member>
+        <member name="T:TripMate.ViewModels.AddExpenseViewModel">
+            <summary>
+            ViewModel for adding an expense.
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:TripMate.ViewModels.AddExpenseViewModel.TripId">
+            <inheritdoc cref="F:TripMate.ViewModels.AddExpenseViewModel._tripId"/>
+        </member>
+        <member name="P:TripMate.ViewModels.AddExpenseViewModel.Title">
+            <inheritdoc cref="F:TripMate.ViewModels.AddExpenseViewModel._title"/>
+        </member>
+        <member name="P:TripMate.ViewModels.AddExpenseViewModel.AmountText">
+            <inheritdoc cref="F:TripMate.ViewModels.AddExpenseViewModel._amountText"/>
+        </member>
+        <member name="P:TripMate.ViewModels.AddExpenseViewModel.Note">
+            <inheritdoc cref="F:TripMate.ViewModels.AddExpenseViewModel._note"/>
+        </member>
+        <member name="P:TripMate.ViewModels.AddExpenseViewModel.SelectedPaidBy">
+            <inheritdoc cref="F:TripMate.ViewModels.AddExpenseViewModel._selectedPaidBy"/>
+        </member>
+        <member name="P:TripMate.ViewModels.AddExpenseViewModel.SelectedSplitType">
+            <inheritdoc cref="F:TripMate.ViewModels.AddExpenseViewModel._selectedSplitType"/>
+        </member>
+        <member name="P:TripMate.ViewModels.AddExpenseViewModel.PerPersonAmountText">
+            <inheritdoc cref="F:TripMate.ViewModels.AddExpenseViewModel._perPersonAmountText"/>
+        </member>
+        <member name="M:TripMate.ViewModels.AddExpenseViewModel.OnAmountTextChanged(System.String)">
+            <summary>Executes the logic for when <see cref="P:TripMate.ViewModels.AddExpenseViewModel.AmountText"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:TripMate.ViewModels.AddExpenseViewModel.AmountText"/> is changed.</remarks>
+        </member>
+        <member name="M:TripMate.ViewModels.AddExpenseViewModel.OnSelectedSplitTypeChanged(TripMate.Models.ExpenseSplitType)">
+            <summary>Executes the logic for when <see cref="P:TripMate.ViewModels.AddExpenseViewModel.SelectedSplitType"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:TripMate.ViewModels.AddExpenseViewModel.SelectedSplitType"/> is changed.</remarks>
+        </member>
+        <member name="F:TripMate.ViewModels.AddExpenseViewModel.loadCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.AddExpenseViewModel.LoadCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.AddExpenseViewModel.LoadCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.AddExpenseViewModel.LoadAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.AddExpenseViewModel.saveCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.AddExpenseViewModel.SaveCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.AddExpenseViewModel.SaveCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.AddExpenseViewModel.SaveAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.AddExpenseViewModel.cancelCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.AddExpenseViewModel.CancelCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.AddExpenseViewModel.CancelCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.AddExpenseViewModel.CancelAsync"/>.</summary>
+        </member>
+        <member name="T:TripMate.ViewModels.BaseViewModel">
+            <summary>
+            Base view model with common properties for loading and validation.
+            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="P:TripMate.ViewModels.BaseViewModel.IsBusy">
+            <inheritdoc cref="F:TripMate.ViewModels.BaseViewModel._isBusy"/>
+        </member>
+        <member name="P:TripMate.ViewModels.BaseViewModel.StatusMessage">
+            <inheritdoc cref="F:TripMate.ViewModels.BaseViewModel._statusMessage"/>
+        </member>
+        <member name="P:TripMate.ViewModels.BaseViewModel.HasError">
+            <inheritdoc cref="F:TripMate.ViewModels.BaseViewModel._hasError"/>
+        </member>
+        <member name="T:TripMate.ViewModels.CreateTripViewModel">
+            <summary>
+            ViewModel for creating a new trip.
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:TripMate.ViewModels.CreateTripViewModel.Name">
+            <inheritdoc cref="F:TripMate.ViewModels.CreateTripViewModel._name"/>
+        </member>
+        <member name="P:TripMate.ViewModels.CreateTripViewModel.Destination">
+            <inheritdoc cref="F:TripMate.ViewModels.CreateTripViewModel._destination"/>
+        </member>
+        <member name="P:TripMate.ViewModels.CreateTripViewModel.StartDate">
+            <inheritdoc cref="F:TripMate.ViewModels.CreateTripViewModel._startDate"/>
+        </member>
+        <member name="P:TripMate.ViewModels.CreateTripViewModel.EndDate">
+            <inheritdoc cref="F:TripMate.ViewModels.CreateTripViewModel._endDate"/>
+        </member>
+        <member name="F:TripMate.ViewModels.CreateTripViewModel.saveCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.CreateTripViewModel.SaveCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.CreateTripViewModel.SaveCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.CreateTripViewModel.SaveAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.CreateTripViewModel.cancelCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.CreateTripViewModel.CancelCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.CreateTripViewModel.CancelCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.CreateTripViewModel.CancelAsync"/>.</summary>
+        </member>
+        <member name="T:TripMate.ViewModels.EditTripViewModel">
+            <summary>
+            ViewModel for editing an existing trip.
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:TripMate.ViewModels.EditTripViewModel.TripId">
+            <inheritdoc cref="F:TripMate.ViewModels.EditTripViewModel._tripId"/>
+        </member>
+        <member name="P:TripMate.ViewModels.EditTripViewModel.Name">
+            <inheritdoc cref="F:TripMate.ViewModels.EditTripViewModel._name"/>
+        </member>
+        <member name="P:TripMate.ViewModels.EditTripViewModel.Destination">
+            <inheritdoc cref="F:TripMate.ViewModels.EditTripViewModel._destination"/>
+        </member>
+        <member name="P:TripMate.ViewModels.EditTripViewModel.StartDate">
+            <inheritdoc cref="F:TripMate.ViewModels.EditTripViewModel._startDate"/>
+        </member>
+        <member name="P:TripMate.ViewModels.EditTripViewModel.EndDate">
+            <inheritdoc cref="F:TripMate.ViewModels.EditTripViewModel._endDate"/>
+        </member>
+        <member name="P:TripMate.ViewModels.EditTripViewModel.SelectedStatus">
+            <inheritdoc cref="F:TripMate.ViewModels.EditTripViewModel._selectedStatus"/>
+        </member>
+        <member name="F:TripMate.ViewModels.EditTripViewModel.loadCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.EditTripViewModel.LoadCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.EditTripViewModel.LoadCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.EditTripViewModel.LoadAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.EditTripViewModel.saveCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.EditTripViewModel.SaveCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.EditTripViewModel.SaveCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.EditTripViewModel.SaveAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.EditTripViewModel.deleteCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.EditTripViewModel.DeleteCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.EditTripViewModel.DeleteCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.EditTripViewModel.DeleteAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.EditTripViewModel.cancelCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.EditTripViewModel.CancelCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.EditTripViewModel.CancelCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.EditTripViewModel.CancelAsync"/>.</summary>
+        </member>
+        <member name="T:TripMate.ViewModels.ExpenseListItemViewModel">
+            <summary>
+            Display item for an expense in list views.
+            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="P:TripMate.ViewModels.ExpenseListItemViewModel.Id">
+            <inheritdoc cref="F:TripMate.ViewModels.ExpenseListItemViewModel._id"/>
+        </member>
+        <member name="P:TripMate.ViewModels.ExpenseListItemViewModel.Title">
+            <inheritdoc cref="F:TripMate.ViewModels.ExpenseListItemViewModel._title"/>
+        </member>
+        <member name="P:TripMate.ViewModels.ExpenseListItemViewModel.Amount">
+            <inheritdoc cref="F:TripMate.ViewModels.ExpenseListItemViewModel._amount"/>
+        </member>
+        <member name="P:TripMate.ViewModels.ExpenseListItemViewModel.PaidByName">
+            <inheritdoc cref="F:TripMate.ViewModels.ExpenseListItemViewModel._paidByName"/>
+        </member>
+        <member name="P:TripMate.ViewModels.ExpenseListItemViewModel.CreatedDateText">
+            <inheritdoc cref="F:TripMate.ViewModels.ExpenseListItemViewModel._createdDateText"/>
+        </member>
+        <member name="T:TripMate.ViewModels.ExpenseListViewModel">
+            <summary>
+            ViewModel for expense list and reports.
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:TripMate.ViewModels.ExpenseListViewModel.TripId">
+            <inheritdoc cref="F:TripMate.ViewModels.ExpenseListViewModel._tripId"/>
+        </member>
+        <member name="P:TripMate.ViewModels.ExpenseListViewModel.SelectedFilterMember">
+            <inheritdoc cref="F:TripMate.ViewModels.ExpenseListViewModel._selectedFilterMember"/>
+        </member>
+        <member name="M:TripMate.ViewModels.ExpenseListViewModel.OnSelectedFilterMemberChanged(TripMate.ViewModels.MemberPickerItem)">
+            <summary>Executes the logic for when <see cref="P:TripMate.ViewModels.ExpenseListViewModel.SelectedFilterMember"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:TripMate.ViewModels.ExpenseListViewModel.SelectedFilterMember"/> is changed.</remarks>
+        </member>
+        <member name="F:TripMate.ViewModels.ExpenseListViewModel.loadCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.ExpenseListViewModel.LoadCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.ExpenseListViewModel.LoadCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.ExpenseListViewModel.LoadAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.ExpenseListViewModel.refreshCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.ExpenseListViewModel.RefreshCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.ExpenseListViewModel.RefreshCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.ExpenseListViewModel.RefreshAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.ExpenseListViewModel.addExpenseCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.ExpenseListViewModel.AddExpenseCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.ExpenseListViewModel.AddExpenseCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.ExpenseListViewModel.AddExpenseAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.ExpenseListViewModel.goBackCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.ExpenseListViewModel.GoBackCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.ExpenseListViewModel.GoBackCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.ExpenseListViewModel.GoBackAsync"/>.</summary>
+        </member>
+        <member name="T:TripMate.ViewModels.LoginViewModel">
+            <summary>
+            ViewModel for the Login page.
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:TripMate.ViewModels.LoginViewModel.Email">
+            <inheritdoc cref="F:TripMate.ViewModels.LoginViewModel._email"/>
+        </member>
+        <member name="P:TripMate.ViewModels.LoginViewModel.Password">
+            <inheritdoc cref="F:TripMate.ViewModels.LoginViewModel._password"/>
+        </member>
+        <member name="F:TripMate.ViewModels.LoginViewModel.loginCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.LoginViewModel.LoginCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.LoginViewModel.LoginCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.LoginViewModel.LoginAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.LoginViewModel.goToRegisterCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.LoginViewModel.GoToRegisterCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.LoginViewModel.GoToRegisterCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.LoginViewModel.GoToRegisterAsync"/>.</summary>
+        </member>
+        <member name="T:TripMate.ViewModels.MemberPickerItem">
+            <summary>
+            Item for member picker (dropdown).
+            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="P:TripMate.ViewModels.MemberPickerItem.Id">
+            <inheritdoc cref="F:TripMate.ViewModels.MemberPickerItem._id"/>
+        </member>
+        <member name="P:TripMate.ViewModels.MemberPickerItem.Name">
+            <inheritdoc cref="F:TripMate.ViewModels.MemberPickerItem._name"/>
+        </member>
+        <member name="T:TripMate.ViewModels.RegisterViewModel">
+            <summary>
+            ViewModel for the Register page.
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:TripMate.ViewModels.RegisterViewModel.Name">
+            <inheritdoc cref="F:TripMate.ViewModels.RegisterViewModel._name"/>
+        </member>
+        <member name="P:TripMate.ViewModels.RegisterViewModel.Email">
+            <inheritdoc cref="F:TripMate.ViewModels.RegisterViewModel._email"/>
+        </member>
+        <member name="P:TripMate.ViewModels.RegisterViewModel.Password">
+            <inheritdoc cref="F:TripMate.ViewModels.RegisterViewModel._password"/>
+        </member>
+        <member name="P:TripMate.ViewModels.RegisterViewModel.ConfirmPassword">
+            <inheritdoc cref="F:TripMate.ViewModels.RegisterViewModel._confirmPassword"/>
+        </member>
+        <member name="F:TripMate.ViewModels.RegisterViewModel.registerCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.RegisterViewModel.RegisterCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.RegisterViewModel.RegisterCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.RegisterViewModel.RegisterAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.RegisterViewModel.goBackCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.RegisterViewModel.GoBackCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.RegisterViewModel.GoBackCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.RegisterViewModel.GoBackAsync"/>.</summary>
+        </member>
+        <member name="T:TripMate.ViewModels.SettlementViewModel">
+            <summary>
+            ViewModel for settlement (who owes whom) display.
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:TripMate.ViewModels.SettlementViewModel.TripId">
+            <inheritdoc cref="F:TripMate.ViewModels.SettlementViewModel._tripId"/>
+        </member>
+        <member name="P:TripMate.ViewModels.SettlementViewModel.TripName">
+            <inheritdoc cref="F:TripMate.ViewModels.SettlementViewModel._tripName"/>
+        </member>
+        <member name="P:TripMate.ViewModels.SettlementViewModel.SettlementText">
+            <inheritdoc cref="F:TripMate.ViewModels.SettlementViewModel._settlementText"/>
+        </member>
+        <member name="F:TripMate.ViewModels.SettlementViewModel.loadCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.SettlementViewModel.LoadCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.SettlementViewModel.LoadCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.SettlementViewModel.LoadAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.SettlementViewModel.refreshCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.SettlementViewModel.RefreshCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.SettlementViewModel.RefreshCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.SettlementViewModel.RefreshAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.SettlementViewModel.goBackCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.SettlementViewModel.GoBackCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.SettlementViewModel.GoBackCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.SettlementViewModel.GoBackAsync"/>.</summary>
+        </member>
+        <member name="T:TripMate.ViewModels.TripDetailViewModel">
+            <summary>
+            ViewModel for trip detail and dashboard.
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.TripId">
+            <inheritdoc cref="F:TripMate.ViewModels.TripDetailViewModel._tripId"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.TripName">
+            <inheritdoc cref="F:TripMate.ViewModels.TripDetailViewModel._tripName"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.Destination">
+            <inheritdoc cref="F:TripMate.ViewModels.TripDetailViewModel._destination"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.DateRange">
+            <inheritdoc cref="F:TripMate.ViewModels.TripDetailViewModel._dateRange"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.Status">
+            <inheritdoc cref="F:TripMate.ViewModels.TripDetailViewModel._status"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.TotalTripCost">
+            <inheritdoc cref="F:TripMate.ViewModels.TripDetailViewModel._totalTripCost"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.YourTotalPaid">
+            <inheritdoc cref="F:TripMate.ViewModels.TripDetailViewModel._yourTotalPaid"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.YourBalance">
+            <inheritdoc cref="F:TripMate.ViewModels.TripDetailViewModel._yourBalance"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.ExpenseCount">
+            <inheritdoc cref="F:TripMate.ViewModels.TripDetailViewModel._expenseCount"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.SettlementSummary">
+            <inheritdoc cref="F:TripMate.ViewModels.TripDetailViewModel._settlementSummary"/>
+        </member>
+        <member name="F:TripMate.ViewModels.TripDetailViewModel.loadCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripDetailViewModel.LoadCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.LoadCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripDetailViewModel.LoadAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.TripDetailViewModel.refreshCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripDetailViewModel.RefreshCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.RefreshCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripDetailViewModel.RefreshAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.TripDetailViewModel.addExpenseCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripDetailViewModel.AddExpenseCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.AddExpenseCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripDetailViewModel.AddExpenseAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.TripDetailViewModel.viewExpensesCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripDetailViewModel.ViewExpensesCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.ViewExpensesCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripDetailViewModel.ViewExpensesAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.TripDetailViewModel.viewSettlementsCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripDetailViewModel.ViewSettlementsCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.ViewSettlementsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripDetailViewModel.ViewSettlementsAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.TripDetailViewModel.editTripCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripDetailViewModel.EditTripCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.EditTripCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripDetailViewModel.EditTripAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.TripDetailViewModel.manageMembersCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripDetailViewModel.ManageMembersCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripDetailViewModel.ManageMembersCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripDetailViewModel.ManageMembersAsync"/>.</summary>
+        </member>
+        <member name="T:TripMate.ViewModels.TripListItemViewModel">
+            <summary>
+            Display item for a trip in list views.
+            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripListItemViewModel.Id">
+            <inheritdoc cref="F:TripMate.ViewModels.TripListItemViewModel._id"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripListItemViewModel.Name">
+            <inheritdoc cref="F:TripMate.ViewModels.TripListItemViewModel._name"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripListItemViewModel.Destination">
+            <inheritdoc cref="F:TripMate.ViewModels.TripListItemViewModel._destination"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripListItemViewModel.StartDate">
+            <inheritdoc cref="F:TripMate.ViewModels.TripListItemViewModel._startDate"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripListItemViewModel.EndDate">
+            <inheritdoc cref="F:TripMate.ViewModels.TripListItemViewModel._endDate"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripListItemViewModel.StatusText">
+            <inheritdoc cref="F:TripMate.ViewModels.TripListItemViewModel._statusText"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripListItemViewModel.DateRangeText">
+            <inheritdoc cref="F:TripMate.ViewModels.TripListItemViewModel._dateRangeText"/>
+        </member>
+        <member name="T:TripMate.ViewModels.TripListViewModel">
+            <summary>
+            ViewModel for the main trip list (dashboard home).
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripListViewModel.UserName">
+            <inheritdoc cref="F:TripMate.ViewModels.TripListViewModel._userName"/>
+        </member>
+        <member name="F:TripMate.ViewModels.TripListViewModel.loadTripsCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripListViewModel.LoadTripsCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripListViewModel.LoadTripsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripListViewModel.LoadTripsAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.TripListViewModel.refreshCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripListViewModel.RefreshCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripListViewModel.RefreshCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripListViewModel.RefreshAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.TripListViewModel.createTripCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripListViewModel.CreateTripCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripListViewModel.CreateTripCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripListViewModel.CreateTripAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.TripListViewModel.selectTripCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripListViewModel.SelectTripCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripListViewModel.SelectTripCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:TripMate.ViewModels.TripListViewModel.SelectTripAsync(TripMate.ViewModels.TripListItemViewModel)"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.TripListViewModel.logoutCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripListViewModel.LogoutCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripListViewModel.LogoutCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripListViewModel.LogoutAsync"/>.</summary>
+        </member>
+        <member name="T:TripMate.ViewModels.TripMembersViewModel">
+            <summary>
+            ViewModel for managing trip members.
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripMembersViewModel.TripId">
+            <inheritdoc cref="F:TripMate.ViewModels.TripMembersViewModel._tripId"/>
+        </member>
+        <member name="P:TripMate.ViewModels.TripMembersViewModel.TripName">
+            <inheritdoc cref="F:TripMate.ViewModels.TripMembersViewModel._tripName"/>
+        </member>
+        <member name="F:TripMate.ViewModels.TripMembersViewModel.loadCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripMembersViewModel.LoadCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripMembersViewModel.LoadCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripMembersViewModel.LoadAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.TripMembersViewModel.refreshCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripMembersViewModel.RefreshCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripMembersViewModel.RefreshCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripMembersViewModel.RefreshAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.TripMembersViewModel.addMemberCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripMembersViewModel.AddMemberCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripMembersViewModel.AddMemberCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripMembersViewModel.AddMemberAsync"/>.</summary>
+        </member>
+        <member name="F:TripMate.ViewModels.TripMembersViewModel.goBackCommand">
+            <summary>The backing field for <see cref="P:TripMate.ViewModels.TripMembersViewModel.GoBackCommand"/>.</summary>
+        </member>
+        <member name="P:TripMate.ViewModels.TripMembersViewModel.GoBackCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:TripMate.ViewModels.TripMembersViewModel.GoBackAsync"/>.</summary>
+        </member>
+        <member name="T:TripMate.Resource">
+            <summary>
+            Android Resource Designer class.
+            Exposes the Android Resource designer assembly into the project Namespace.
+            </summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TripId">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TripId" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Title">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Title" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.AmountText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "AmountText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Note">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Note" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedPaidBy">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedPaidBy" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedSplitType">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedSplitType" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PerPersonAmountText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PerPersonAmountText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsBusy">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsBusy" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.StatusMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "StatusMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.HasError">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "HasError" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Name">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Name" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Destination">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Destination" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.StartDate">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "StartDate" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.EndDate">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "EndDate" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedStatus">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedStatus" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Id">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Id" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Amount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Amount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PaidByName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PaidByName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CreatedDateText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CreatedDateText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedFilterMember">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedFilterMember" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Email">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Email" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Password">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Password" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ConfirmPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ConfirmPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TripName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TripName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SettlementText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SettlementText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.DateRange">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "DateRange" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Status">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Status" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TotalTripCost">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TotalTripCost" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.YourTotalPaid">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "YourTotalPaid" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.YourBalance">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "YourBalance" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ExpenseCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ExpenseCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SettlementSummary">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SettlementSummary" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.StatusText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "StatusText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.DateRangeText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "DateRangeText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UserName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UserName" generated properties.</summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TripId">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TripId" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Title">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Title" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.AmountText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "AmountText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Note">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Note" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedPaidBy">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedPaidBy" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedSplitType">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedSplitType" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PerPersonAmountText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PerPersonAmountText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsBusy">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsBusy" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.StatusMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "StatusMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasError">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasError" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Name">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Name" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Destination">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Destination" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.StartDate">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "StartDate" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.EndDate">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "EndDate" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedStatus">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedStatus" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Id">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Id" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Amount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Amount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PaidByName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PaidByName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CreatedDateText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CreatedDateText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedFilterMember">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedFilterMember" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Email">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Email" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Password">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Password" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ConfirmPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ConfirmPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TripName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TripName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SettlementText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SettlementText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.DateRange">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "DateRange" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Status">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Status" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TotalTripCost">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TotalTripCost" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.YourTotalPaid">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "YourTotalPaid" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.YourBalance">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "YourBalance" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ExpenseCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ExpenseCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SettlementSummary">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SettlementSummary" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.StatusText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "StatusText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.DateRangeText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "DateRangeText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UserName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UserName" generated properties.</summary>
+        </member>
+    </members>
+</doc>

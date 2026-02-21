@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TripMate.ViewModels"
+             x:Class="TripMate.Views.RegisterPage"
+             x:DataType="vm:RegisterViewModel"
+             Title="Create Account">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="20">
+            <Border Style="{StaticResource InputCardStyle}">
+                <VerticalStackLayout Spacing="16">
+                    <Entry Placeholder="Name" Text="{Binding Name}" />
+                    <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" />
+                    <Entry Placeholder="Password (min 6 chars)" Text="{Binding Password}"
+                           IsPassword="True" />
+                    <Entry Placeholder="Confirm Password" Text="{Binding ConfirmPassword}"
+                           IsPassword="True" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="{Binding StatusMessage}" IsVisible="{Binding HasError}"
+                   TextColor="Red" HorizontalOptions="Center" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                              HorizontalOptions="Center" Color="{StaticResource Primary}" />
+
+            <Button Text="Register" Command="{Binding RegisterCommand}"
+                    HorizontalOptions="Fill" Margin="16,8" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

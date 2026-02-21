@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TripMate.ViewModels"
+             x:Class="TripMate.Views.ExpenseListPage"
+             x:DataType="vm:ExpenseListViewModel"
+             Title="Expenses">
+
+    <Grid RowDefinitions="Auto,*">
+        <Border Grid.Row="0" Padding="16,8" Margin="0">
+            <Picker Title="Filter by member" ItemsSource="{Binding Members}"
+                    SelectedItem="{Binding SelectedFilterMember}"
+                    ItemDisplayBinding="{Binding Name}" />
+        </Border>
+
+        <RefreshView Grid.Row="1" IsRefreshing="{Binding IsBusy}" Command="{Binding RefreshCommand}">
+            <ScrollView>
+                <VerticalStackLayout Padding="8">
+                    <Label Text="{Binding StatusMessage}" IsVisible="{Binding HasError}"
+                           TextColor="Red" Margin="16,8" />
+
+                    <CollectionView ItemsSource="{Binding Expenses}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ExpenseListItemViewModel">
+                                <Border Style="{StaticResource CardStyle}">
+                                    <Grid ColumnDefinitions="*,Auto" Padding="4">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                            <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="16" />
+                                            <Label Text="{Binding PaidByName}" Opacity="0.8" FontSize="14" />
+                                            <Label Text="{Binding CreatedDateText}" Opacity="0.6" FontSize="12" />
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="1" VerticalOptions="Center" FontAttributes="Bold">
+                                            <Label.Text>
+                                                <Binding Path="Amount" StringFormat="₹{0:N2}" />
+                                            </Label.Text>
+                                        </Label>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.EmptyView>
+                            <Label Text="No expenses yet." HorizontalOptions="Center"
+                                   Margin="0,40" Opacity="0.7" />
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+
+                    <Button Text="+ Add Expense" Command="{Binding AddExpenseCommand}"
+                            Margin="16,16" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

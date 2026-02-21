@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TripMate.ViewModels"
+             xmlns:models="clr-namespace:TripMate.Models"
+             x:Class="TripMate.Views.EditTripPage"
+             x:DataType="vm:EditTripViewModel"
+             Title="Edit Trip">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="16">
+            <Border Style="{StaticResource InputCardStyle}">
+                <VerticalStackLayout Spacing="16">
+                    <Entry Placeholder="Trip Name" Text="{Binding Name}" />
+                    <Entry Placeholder="Destination" Text="{Binding Destination}" />
+                    <DatePicker Date="{Binding StartDate}" Title="Start Date" />
+                    <DatePicker Date="{Binding EndDate}" Title="End Date" />
+                    <Label Text="Status" FontSize="12" Opacity="0.7" />
+                    <Picker ItemsSource="{Binding StatusOptions}"
+                            SelectedItem="{Binding SelectedStatus}"
+                            ItemDisplayBinding="{Binding}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="{Binding StatusMessage}" IsVisible="{Binding HasError}"
+                   TextColor="Red" HorizontalOptions="Center" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                              HorizontalOptions="Center" />
+
+            <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="Fill" Margin="16,8" />
+            <Button Text="Cancel" Command="{Binding CancelCommand}"
+                    BackgroundColor="Transparent" TextColor="{StaticResource Gray500}"
+                    HorizontalOptions="Fill" />
+            <Button Text="Delete Trip" Command="{Binding DeleteCommand}"
+                    BackgroundColor="#FF3B30" TextColor="White"
+                    HorizontalOptions="Fill" Margin="16,16,16,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

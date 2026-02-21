@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TripMate.ViewModels"
+             x:Class="TripMate.Views.AddExpensePage"
+             x:DataType="vm:AddExpenseViewModel"
+             Title="Add Expense">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="16">
+            <Border Style="{StaticResource InputCardStyle}">
+                <VerticalStackLayout Spacing="16">
+                    <Entry Placeholder="Expense Title" Text="{Binding Title}" />
+                    <Entry Placeholder="Amount (₹)" Text="{Binding AmountText}" Keyboard="Numeric" />
+                    <Picker Title="Paid By" ItemsSource="{Binding Members}"
+                            SelectedItem="{Binding SelectedPaidBy}"
+                            ItemDisplayBinding="{Binding Name}" />
+                    <Picker Title="Split Type" ItemsSource="{Binding SplitTypes}"
+                            SelectedItem="{Binding SelectedSplitType}"
+                            ItemDisplayBinding="{Binding}" />
+                    <Label Text="{Binding PerPersonAmountText}" FontSize="14" Opacity="0.8" />
+                    <Editor Placeholder="Note (optional)" Text="{Binding Note}" HeightRequest="80" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="{Binding StatusMessage}" IsVisible="{Binding HasError}"
+                   TextColor="Red" HorizontalOptions="Center" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                              HorizontalOptions="Center" />
+
+            <Button Text="Add Expense" Command="{Binding SaveCommand}"
+                    HorizontalOptions="Fill" Margin="16,8" />
+            <Button Text="Cancel" Command="{Binding CancelCommand}"
+                    BackgroundColor="Transparent" TextColor="{StaticResource Gray500}"
+                    HorizontalOptions="Fill" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
