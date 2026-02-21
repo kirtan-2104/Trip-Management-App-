@@ -35,6 +35,18 @@
             Repository interface for User entity operations.
             </summary>
         </member>
+        <member name="T:TripMate.Data.Migrations.InitialCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:TripMate.Data.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TripMate.Data.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TripMate.Data.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
         <member name="T:TripMate.Data.TripRepository">
             <summary>
             Repository implementation for Trip entity.
