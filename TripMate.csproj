@@ -57,13 +57,18 @@
 
 		<!-- App settings for SQL Server connection string (bundled as app asset) -->
 		<MauiAsset Include="appsettings.json" LogicalName="appsettings.json" />
+
+		<!-- Exclude API project (separate project in subfolder) -->
+		<Compile Remove="TripMate.Api\**" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

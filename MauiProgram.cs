@@ -25,27 +25,46 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-        // Database - SQL Server
-        builder.Services.AddDbContext<AppDbContext>(options =>
+        var useApi = DatabaseConfiguration.UseApiBackend;
+
+        if (useApi)
         {
-            var connectionString = Helpers.DatabaseConfiguration.GetConnectionString();
-            options.UseSqlServer(connectionString);
-        });
+            var baseUrl = DatabaseConfiguration.ApiBaseUrl.TrimEnd('/');
+            builder.Services.AddHttpClient<ITripMateApiClient, TripMateApiClient>(client =>
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                client.Timeout = TimeSpan.FromSeconds(30);
+            });
 
-        // Repositories
-        builder.Services.AddTransient<IUserRepository, UserRepository>();
-        builder.Services.AddTransient<ITripRepository, TripRepository>();
-        builder.Services.AddTransient<IExpenseRepository, ExpenseRepository>();
+            builder.Services.AddSingleton<IAuthService, ApiAuthService>();
+            builder.Services.AddTransient<ITripService, ApiTripService>();
+            builder.Services.AddTransient<IExpenseService, ApiExpenseService>();
+            builder.Services.AddTransient<ISettlementService, ApiSettlementService>();
+            builder.Services.AddTransient<IDashboardService, ApiDashboardService>();
+            builder.Services.AddTransient<IExpenseCalculationService, ExpenseCalculationService>();
+        }
+        else
+        {
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            {
+                if (DatabaseConfiguration.UseSqlite)
+                    options.UseSqlite($"Filename={DatabaseConfiguration.SqlitePath}");
+                else
+                    options.UseSqlServer(DatabaseConfiguration.GetSqlServerConnectionString());
+            });
 
-        // Services
-        builder.Services.AddSingleton<IAuthService, AuthService>();
-        builder.Services.AddTransient<ITripService, TripService>();
-        builder.Services.AddTransient<IExpenseService, ExpenseService>();
-        builder.Services.AddTransient<IExpenseCalculationService, ExpenseCalculationService>();
-        builder.Services.AddTransient<ISettlementService, SettlementService>();
-        builder.Services.AddTransient<IDashboardService, DashboardService>();
+            builder.Services.AddTransient<IUserRepository, UserRepository>();
+            builder.Services.AddTransient<ITripRepository, TripRepository>();
+            builder.Services.AddTransient<IExpenseRepository, ExpenseRepository>();
 
-        // ViewModels
+            builder.Services.AddSingleton<IAuthService, AuthService>();
+            builder.Services.AddTransient<ITripService, TripService>();
+            builder.Services.AddTransient<IExpenseService, ExpenseService>();
+            builder.Services.AddTransient<IExpenseCalculationService, ExpenseCalculationService>();
+            builder.Services.AddTransient<ISettlementService, SettlementService>();
+            builder.Services.AddTransient<IDashboardService, DashboardService>();
+        }
+
         builder.Services.AddTransient<LoginViewModel>();
         builder.Services.AddTransient<RegisterViewModel>();
         builder.Services.AddTransient<TripListViewModel>();
@@ -57,7 +76,6 @@ public static class MauiProgram
         builder.Services.AddTransient<SettlementViewModel>();
         builder.Services.AddTransient<TripMembersViewModel>();
 
-        // Views
         builder.Services.AddTransient<LoginPage>();
         builder.Services.AddTransient<RegisterPage>();
         builder.Services.AddTransient<TripListPage>();

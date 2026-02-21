@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="TripMate.Api/TripMate.Api.csproj" />
+  <Project Path="TripMate.csproj" />
+</Solution>

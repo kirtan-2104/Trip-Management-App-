@@ -32,17 +32,21 @@ public partial class AppShell : Shell
 
     private async Task SeedDatabaseAsync()
     {
+        if (Helpers.DatabaseConfiguration.UseApiBackend) return; // No local DB when using API
         try
         {
             var sp = Handler?.MauiContext?.Services;
             if (sp == null) return;
             using var scope = sp.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            await DataSeeder.SeedAsync(db);
+            var db = scope.ServiceProvider.GetService<Data.AppDbContext>();
+            if (db != null)
+                await Data.DataSeeder.SeedAsync(db);
         }
-        catch
+        catch (Exception ex)
         {
-            // Seed runs on first load
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine($"Database seed error: {ex}");
+#endif
         }
     }
 }

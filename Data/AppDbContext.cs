@@ -26,11 +26,12 @@ public class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // Only configure if not already configured (e.g. from DI)
         if (!optionsBuilder.IsConfigured)
         {
-            var connectionString = DatabaseConfiguration.GetConnectionString();
-            optionsBuilder.UseSqlServer(connectionString);
+            if (DatabaseConfiguration.UseSqlite)
+                optionsBuilder.UseSqlite($"Filename={DatabaseConfiguration.SqlitePath}");
+            else
+                optionsBuilder.UseSqlServer(DatabaseConfiguration.GetSqlServerConnectionString());
         }
     }
 
