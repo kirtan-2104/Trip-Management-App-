@@ -1,4 +1,4 @@
-<api type="debug" assembly-name="TripMate" mvid="0f7cfda357f040e892c15c7230d84e25">
+<api type="debug" assembly-name="TripMate" mvid="3233206ec0af48428b7473b5c8a1c940">
   <java-to-managed>
     <entry java-name="crc64445c7c3cd56a3671/MainActivity" managed-name="TripMate.MainActivity, TripMate" managed-type-token-id="33554445" />
     <entry java-name="crc64445c7c3cd56a3671/MainApplication" managed-name="TripMate.MainApplication, TripMate" managed-type-token-id="33554446" />

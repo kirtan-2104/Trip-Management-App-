@@ -7,7 +7,7 @@
         <member name="T:TripMate.Data.AppDbContext">
             <summary>
             Entity Framework Core database context for TripMate.
-            Uses SQLite for local storage.
+            Uses SQL Server for data storage.
             </summary>
         </member>
         <member name="T:TripMate.Data.DataSeeder">
@@ -43,6 +43,11 @@
         <member name="T:TripMate.Data.UserRepository">
             <summary>
             Repository implementation for User entity.
+            </summary>
+        </member>
+        <member name="T:TripMate.Helpers.DatabaseConfiguration">
+            <summary>
+            Loads SQL Server connection string from appsettings.json or environment.
             </summary>
         </member>
         <member name="T:TripMate.Helpers.PasswordHelper">

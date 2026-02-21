@@ -11,7 +11,8 @@ public static class DataSeeder
 {
     public static async Task SeedAsync(AppDbContext context)
     {
-        await context.Database.EnsureCreatedAsync();
+        // Apply pending migrations (or use EnsureCreated if no migrations)
+        await context.Database.MigrateAsync();
 
         if (await context.Users.AnyAsync())
             return; // Already seeded

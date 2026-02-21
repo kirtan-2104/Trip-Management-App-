@@ -497,3 +497,7 @@ D:\Git\Trip Management\bin\Debug\net10.0-ios\iossimulator-x64\ru\Microsoft.Data.
 D:\Git\Trip Management\bin\Debug\net10.0-ios\iossimulator-x64\tr\Microsoft.Data.SqlClient.resources.dll
 D:\Git\Trip Management\bin\Debug\net10.0-ios\iossimulator-x64\zh-Hans\Microsoft.Data.SqlClient.resources.dll
 D:\Git\Trip Management\bin\Debug\net10.0-ios\iossimulator-x64\zh-Hant\Microsoft.Data.SqlClient.resources.dll
+D:\Git\Trip Management\bin\Debug\net10.0-ios\iossimulator-x64\Microsoft.Maui.Controls.HotReload.Forms.dll
+D:\Git\Trip Management\bin\Debug\net10.0-ios\iossimulator-x64\Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
+D:\Git\Trip Management\bin\Debug\net10.0-ios\iossimulator-x64\Microsoft.VisualStudio.DesignTools.TapContract.dll
+D:\Git\Trip Management\bin\Debug\net10.0-ios\iossimulator-x64\Microsoft.VisualStudio.DesignTools.XamlTapContract.dll
